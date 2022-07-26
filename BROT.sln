@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BROT", "BROT.csproj", "{24CCA704-CE53-4BC4-85BF-90CF040B7E26}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BROT", ".\BROT\BROT.csproj", "{24CCA704-CE53-4BC4-85BF-90CF040B7E26}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BROT.Tests", ".\BROT.Tests\BROT.Tests.csproj", "{DAA4E1CD-E4D3-412C-A285-5EB4FDE1A2A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{24CCA704-CE53-4BC4-85BF-90CF040B7E26}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24CCA704-CE53-4BC4-85BF-90CF040B7E26}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24CCA704-CE53-4BC4-85BF-90CF040B7E26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DAA4E1CD-E4D3-412C-A285-5EB4FDE1A2A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAA4E1CD-E4D3-412C-A285-5EB4FDE1A2A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAA4E1CD-E4D3-412C-A285-5EB4FDE1A2A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAA4E1CD-E4D3-412C-A285-5EB4FDE1A2A9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
