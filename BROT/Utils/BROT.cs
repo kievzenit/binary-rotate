@@ -1,4 +1,4 @@
-﻿namespace BROT
+﻿namespace BROT.Utils
 {
     public static class BROT
     {
