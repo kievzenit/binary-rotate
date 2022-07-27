@@ -8,7 +8,7 @@ namespace BROT
         const string LICENSE = "MIT";
         const byte MAJOR_VERSION = 0;
         const byte MINOR_VERSION = 1;
-        const byte PATCH_VERSION = 0; 
+        const byte PATCH_VERSION = 1; 
 
         const byte DEFAULT_ROTATION_DEGREE = 13;
 
@@ -60,7 +60,7 @@ version: {MAJOR_VERSION}.{MINOR_VERSION}.{PATCH_VERSION}
                 || argument == "--help"
                 || argument == "-d"
                 || argument == "--degrees"
-                || argument == "p"
+                || argument == "-p"
                 || argument == "--positive"
                 || argument == "-n"
                 || argument == "--negative";
@@ -106,79 +106,90 @@ version: {MAJOR_VERSION}.{MINOR_VERSION}.{PATCH_VERSION}
 
         private static void MultipleInputArgumentsHandler(string[] arguments)
         {
-            var lastKeyPosition = -1;
-            for (var i = 0; i < 3; i++)
+            var filenames = new List<string>();
+
+            try
             {
-                if (CheckIfArgumentIsKey(arguments[i]))
-                {
-                    lastKeyPosition = i;
-
-                    try
-                    {
-                        ParseSettings(new string[2] { arguments[i], arguments[i + 1] });
-                    }
-                    catch (FormatException)
-                    {
-                        PrintError($"{arguments[i+1]} is not a number or not in this range: 0-255!");
-                        return;
-                    }
-                    catch (IncorrectPlaceForHelpException)
-                    {
-                        PrintUsage();
-                        return;
-                    }
-                }
+                filenames.AddRange(ParseSettings(arguments));
             }
+            catch (IncorrectPlaceForHelpException)
+            {
+                return;
+            }
+            catch (IndexOutOfRangeException)
+            {
+                PrintError("Degrees key was specifies, but degrees number wasn't!");
+                return;
+            }
+            catch (FormatException)
+            {
+                PrintError("Degrees must be a number in range from 0 to 255!");
+                return;
+            }
+            
 
-            for (var i = lastKeyPosition + 1; i < arguments.Length; i++)
+            for (var i = 0; i < filenames.Count; i++)
             {
                 try
                 {
-                    RotateFile(arguments[i]);
+                    RotateFile(filenames[i]);
                 }
                 catch (PathTooLongException)
                 {
-                    PrintError($"Specified path: {arguments[i]} too long!");
+                    PrintError($"Specified path: {filenames[i]} too long!");
                 }
                 catch (DirectoryNotFoundException)
                 {
-                    PrintError($"Directory: {arguments[i]} not found!");
+                    PrintError($"Directory: {filenames[i]} not found!");
                 }
                 catch (UnauthorizedAccessException)
                 {
-                    PrintError($"You don't have permission to this file: {arguments[i]}!");
+                    PrintError($"You don't have permission to this file: {filenames[i]}!");
                 }
                 catch (FileNotFoundException)
                 {
-                    PrintError($"File: {arguments[i]} not found!");
+                    PrintError($"File: {filenames[i]} not found!");
                 }
             }
         }
 
-        private static void ParseSettings(string[] arguments)
+        private static IEnumerable<string> ParseSettings(string[] arguments)
         {
-            switch (arguments[0])
+            var filenames = new List<string>();
+            for (var i = 0; i < arguments.Length; i++)
             {
-                case "-h":
-                case "--help":
-                    PrintUsage();
-                    throw new IncorrectPlaceForHelpException();
+                switch (arguments[i])
+                {
+                    case "-h":
+                    case "--help":
+                        PrintUsage();
+                        throw new IncorrectPlaceForHelpException();
 
-                case "-d":
-                case "--degrees":
-                    rotationDegree = byte.Parse(arguments[1]);
-                    break;
+                    case "-d":
+                    case "--degrees":
+                        if (++i > arguments.Length)
+                            throw new IndexOutOfRangeException();
 
-                case "-p":
-                case "--positive":
-                    isPositiveRotation = true;
-                    break;
+                        rotationDegree = byte.Parse(arguments[i]);
+                        continue;
 
-                case "-n":
-                case "--negative":
-                    isPositiveRotation = false;
-                    break;
+                    case "-p":
+                    case "--positive":
+                        isPositiveRotation = true;
+                        continue;
+
+                    case "-n":
+                    case "--negative":
+                        isPositiveRotation = false;
+                        continue;
+
+                    default:
+                        filenames.Add(arguments[i]);
+                        continue;
+                }
             }
+
+            return filenames;
         }
 
         private static void RotateFile(string fileName)
