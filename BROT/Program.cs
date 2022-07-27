@@ -7,8 +7,8 @@ namespace BROT
         const string AUTHOR = "kievzenit";
         const string LICENSE = "MIT";
         const byte MAJOR_VERSION = 0;
-        const byte MINOR_VERSION = 1;
-        const byte PATCH_VERSION = 1; 
+        const byte MINOR_VERSION = 2;
+        const byte PATCH_VERSION = 0; 
 
         const byte DEFAULT_ROTATION_DEGREE = 13;
 
@@ -23,8 +23,6 @@ namespace BROT
                 case 1: OneInputArgumentHandler(args[0]); break;
                 default: MultipleInputArgumentsHandler(args); break;
             }
-
-            //TODO: add support for directories, not only files
         }
 
         private static void PrintUsage()
@@ -35,10 +33,10 @@ namespace BROT
     -d or --degrees number: to specify rotation degrees (default: 13)
     -p or --positive: to specify rotation type as positive (default)
     -n or --negative: to specify rotation type as negative
-    [files...] filenames to be rotated, note: output file will be the same
+    [files... directories...] filenames or directories to be rotated, note: output file will be the same
 
     example:
-        .\brot -d 17 -n test.txt text.txt
+        .\brot -d 17 -n test.txt text.txt directory
 
 author: {AUTHOR}
 license: {LICENSE}
@@ -84,7 +82,7 @@ version: {MAJOR_VERSION}.{MINOR_VERSION}.{PATCH_VERSION}
 
             try
             {
-                RotateFile(argument);
+                RotatePath(argument);
             }
             catch (PathTooLongException)
             {
@@ -106,17 +104,17 @@ version: {MAJOR_VERSION}.{MINOR_VERSION}.{PATCH_VERSION}
 
         private static void MultipleInputArgumentsHandler(string[] arguments)
         {
-            var filenames = new List<string>();
+            var files = new List<string>();
 
             try
             {
-                filenames.AddRange(ParseSettings(arguments));
+                files.AddRange(ParseSettings(arguments));
             }
             catch (IncorrectPlaceForHelpException)
             {
                 return;
             }
-            catch (IndexOutOfRangeException)
+            catch (IndexOutOfRangeException ex)
             {
                 PrintError("Degrees key was specifies, but degrees number wasn't!");
                 return;
@@ -128,34 +126,34 @@ version: {MAJOR_VERSION}.{MINOR_VERSION}.{PATCH_VERSION}
             }
             
 
-            for (var i = 0; i < filenames.Count; i++)
+            for (var i = 0; i < files.Count; i++)
             {
                 try
                 {
-                    RotateFile(filenames[i]);
+                    RotatePath(files[i]);
                 }
                 catch (PathTooLongException)
                 {
-                    PrintError($"Specified path: {filenames[i]} too long!");
+                    PrintError($"Specified path: {files[i]} too long!");
                 }
                 catch (DirectoryNotFoundException)
                 {
-                    PrintError($"Directory: {filenames[i]} not found!");
+                    PrintError($"Directory: {files[i]} not found!");
                 }
                 catch (UnauthorizedAccessException)
                 {
-                    PrintError($"You don't have permission to this file: {filenames[i]}!");
+                    PrintError($"You don't have permission to this file: {files[i]}!");
                 }
                 catch (FileNotFoundException)
                 {
-                    PrintError($"File: {filenames[i]} not found!");
+                    PrintError($"File: {files[i]} not found!");
                 }
             }
         }
 
         private static IEnumerable<string> ParseSettings(string[] arguments)
         {
-            var filenames = new List<string>();
+            var files = new List<string>();
             for (var i = 0; i < arguments.Length; i++)
             {
                 switch (arguments[i])
@@ -184,12 +182,34 @@ version: {MAJOR_VERSION}.{MINOR_VERSION}.{PATCH_VERSION}
                         continue;
 
                     default:
-                        filenames.Add(arguments[i]);
+                        files.Add(arguments[i]);
                         continue;
                 }
             }
 
-            return filenames;
+            return files;
+        }
+
+        private static void RotatePath(string path)
+        {
+            if (!IsDirectory(path))
+            {
+                RotateFile(path);
+                return;
+            }
+
+            var directories = Directory.EnumerateDirectories(path);
+            var files = Directory.EnumerateFiles(path);
+
+            foreach (var directory in directories)
+            {
+                RotatePath(directory);
+            }
+
+            foreach (var file in files)
+            {
+                RotateFile(file);
+            }
         }
 
         private static void RotateFile(string fileName)
@@ -202,6 +222,13 @@ version: {MAJOR_VERSION}.{MINOR_VERSION}.{PATCH_VERSION}
                 file.Position = 0;
                 file.Write(BROT.Rotate(buffer, rotationDegree, isPositiveRotation));
             }
+        }
+
+        private static bool IsDirectory(string path)
+        {
+            var attributes = File.GetAttributes(path);
+
+            return (attributes & FileAttributes.Directory) != 0;
         }
     }
 }
