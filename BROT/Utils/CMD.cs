@@ -14,6 +14,8 @@ namespace BROT.Utils
         private byte RotationDegree { get; set; }
         private bool IsPositiveRotation { get; set; }
 
+        const byte DEFAULT_ROTATION_DEGREE = 13;
+
 
         public CMD(
             string[] args,
@@ -29,6 +31,9 @@ namespace BROT.Utils
             this.PatchVersion = patchVersion;
             this.Author = author;
             this.License = license;
+
+            this.RotationDegree = DEFAULT_ROTATION_DEGREE;
+            this.IsPositiveRotation = true;
         }
 
         public void Run()
