@@ -6,8 +6,8 @@ namespace BROT
     {
         const string AUTHOR = "kievzenit";
         const string LICENSE = "MIT";
-        const byte MAJOR_VERSION = 0;
-        const byte MINOR_VERSION = 2;
+        const byte MAJOR_VERSION = 1;
+        const byte MINOR_VERSION = 0;
         const byte PATCH_VERSION = 0;
 
         static void Main(string[] args)
