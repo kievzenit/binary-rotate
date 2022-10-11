@@ -1,5 +1,7 @@
 # BROT
 
+[![build](https://github.com/kievzenit/binary-rotate/actions/workflows/ci-build.yml/badge.svg?branch=master&event=push)](https://github.com/kievzenit/binary-rotate/actions/workflows/ci-build.yml)
+
 BROT - binary rotator, a CLI project for "ciphering" any data.
 
 It uses binary data rotation algorithm invented by me)
