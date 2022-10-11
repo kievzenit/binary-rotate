@@ -14,7 +14,7 @@ namespace BROT.Tests
             const bool isPositiveRotation = true;
 
             //act
-            var actual = BROT.Rotate(data, ROTATION_DEGREE, isPositiveRotation);
+            var actual = BROT.Utils.BROT.Rotate(data, ROTATION_DEGREE, isPositiveRotation);
 
             //assert
             Assert.AreEqual(expected, actual[0]);
@@ -29,7 +29,7 @@ namespace BROT.Tests
             const bool isPositiveRotation = true;
 
             //act
-            var actual = BROT.Rotate(data, ROTATION_DEGREE, isPositiveRotation);
+            var actual = BROT.Utils.BROT.Rotate(data, ROTATION_DEGREE, isPositiveRotation);
 
             //assert
             Assert.AreEqual(expected, actual[0]);
@@ -44,7 +44,7 @@ namespace BROT.Tests
             const bool isPositiveRotation = false;
 
             //act
-            var actual = BROT.Rotate(data, ROTATION_DEGREE, isPositiveRotation);
+            var actual = BROT.Utils.BROT.Rotate(data, ROTATION_DEGREE, isPositiveRotation);
 
             //assert
             Assert.AreEqual(expected, actual[0]);
@@ -59,7 +59,7 @@ namespace BROT.Tests
             const bool isPositiveRotation = false;
 
             //act
-            var actual = BROT.Rotate(data, ROTATION_DEGREE, isPositiveRotation);
+            var actual = BROT.Utils.BROT.Rotate(data, ROTATION_DEGREE, isPositiveRotation);
 
             //assert
             Assert.AreEqual(expected, actual[0]);
