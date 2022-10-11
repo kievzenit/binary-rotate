@@ -1,6 +1,7 @@
 # BROT
 
 [![build](https://github.com/kievzenit/binary-rotate/actions/workflows/ci-build.yml/badge.svg?branch=master&event=push)](https://github.com/kievzenit/binary-rotate/actions/workflows/ci-build.yml)
+[![codecov](https://codecov.io/gh/kievzenit/binary-rotate/branch/master/graph/badge.svg?token=OIICVCK4QQ)](https://codecov.io/gh/kievzenit/binary-rotate)
 
 BROT - binary rotator, a CLI project for "ciphering" any data.
 
